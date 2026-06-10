@@ -4,7 +4,7 @@ const emptyState = document.querySelector("#emptyState");
 const loadingState = document.querySelector("#loadingState");
 const resultState = document.querySelector("#resultState");
 const resultImage = document.querySelector("#resultImage");
-const downloadLink = document.querySelector("#downloadLink");
+const saveToPhotos = document.querySelector("#saveToPhotos");
 const postToX = document.querySelector("#postToX");
 const errorBox = document.querySelector("#errorBox");
 
@@ -19,6 +19,8 @@ const previews = {
 const imageState = {
   basePhoto: ""
 };
+
+let generatedImageDataUrl = "";
 
 function showOnly(state) {
   emptyState.classList.toggle("hidden", state !== "empty");
@@ -73,6 +75,17 @@ async function normalizeImageFile(file) {
   return canvas.toDataURL("image/png");
 }
 
+function dataUrlToFile(dataUrl, filename) {
+  const [header, base64] = dataUrl.split(",");
+  const mimeType = header.match(/^data:([^;]+)/)?.[1] || "image/png";
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+  return new File([bytes], filename, { type: mimeType });
+}
+
 function applyPreview(name, dataUrl) {
   imageState[name] = dataUrl;
   previews[name].src = dataUrl;
@@ -89,6 +102,37 @@ async function postGeneratedImageToX() {
 
   const text = encodeURIComponent("#たけるとにんケット #にんケット2026");
   window.open(`https://x.com/intent/tweet?text=${text}`, "_blank", "noopener,noreferrer");
+}
+
+async function saveGeneratedImageToPhotos() {
+  clearError();
+
+  if (!generatedImageDataUrl) {
+    showError("先に画像を生成してください。");
+    return;
+  }
+
+  const file = dataUrlToFile(generatedImageDataUrl, "takeru-ninket.png");
+
+  if (navigator.canShare?.({ files: [file] }) && navigator.share) {
+    try {
+      await navigator.share({
+        files: [file],
+        title: "たけるとにんケット",
+        text: "生成した画像を保存します。"
+      });
+      return;
+    } catch (error) {
+      if (error.name === "AbortError") return;
+      showError("保存画面を開けませんでした。画像を長押しして保存してください。");
+      return;
+    }
+  }
+
+  const link = document.createElement("a");
+  link.href = generatedImageDataUrl;
+  link.download = "takeru-ninket.png";
+  link.click();
 }
 
 async function handleFile(name, file) {
@@ -137,8 +181,8 @@ async function generate(event) {
       throw new Error(payload.error || "生成に失敗しました。");
     }
 
+    generatedImageDataUrl = payload.image;
     resultImage.src = payload.image;
-    downloadLink.href = payload.image;
     showOnly("result");
   } catch (error) {
     showOnly("empty");
@@ -155,4 +199,5 @@ for (const [name, input] of Object.entries(inputs)) {
 
 form.addEventListener("submit", generate);
 
+saveToPhotos.addEventListener("click", saveGeneratedImageToPhotos);
 postToX.addEventListener("click", postGeneratedImageToX);
