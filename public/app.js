@@ -139,10 +139,7 @@ async function saveGeneratedImageToPhotos() {
 function openFanSiteInNewWindow(event) {
   event.preventDefault();
   const url = fanSiteBanner.href;
-  const opened = window.open(url, "_blank", "noopener,noreferrer");
-  if (!opened) {
-    window.location.href = url;
-  }
+  window.open(url, "_blank");
 }
 
 async function handleFile(name, file) {
