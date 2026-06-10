@@ -39,3 +39,17 @@ npm start
   - `NODE_ENV=production`
 
 `.env` は公開リポジトリへpushしないでください。公開後は誰でも生成できるため、OpenAIの利用料金が発生します。
+
+## Vercelで公開する
+
+Vercelでは `public/` を静的サイトとして配信し、`api/` 配下をServerless Functionとして使います。
+
+- Framework Preset: Other
+- Build Command: 空欄または未設定
+- Output Directory: 空欄または未設定
+- Environment Variables:
+  - `OPENAI_API_KEY`
+  - `OPENAI_IMAGE_MODEL=gpt-image-2`
+  - `NODE_ENV=production`
+
+GitHub連携でこのリポジトリをImportし、上記の環境変数を入れてDeployします。
