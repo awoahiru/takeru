@@ -59,7 +59,7 @@ function loadImage(dataUrl) {
 async function normalizeImageFile(file) {
   const sourceDataUrl = await fileToDataUrl(file);
   const image = await loadImage(sourceDataUrl);
-  const maxEdge = 2048;
+  const maxEdge = 1600;
   const scale = Math.min(1, maxEdge / Math.max(image.naturalWidth, image.naturalHeight));
   const width = Math.max(1, Math.round(image.naturalWidth * scale));
   const height = Math.max(1, Math.round(image.naturalHeight * scale));
@@ -72,7 +72,7 @@ async function normalizeImageFile(file) {
   context.fillRect(0, 0, width, height);
   context.drawImage(image, 0, 0, width, height);
 
-  return canvas.toDataURL("image/png");
+  return canvas.toDataURL("image/jpeg", 0.9);
 }
 
 function dataUrlToFile(dataUrl, filename) {
