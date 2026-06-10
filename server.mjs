@@ -47,6 +47,12 @@ const referenceAssets = {
     fallbackPath: join(publicDir, "assets", "snake-reference.png"),
     filename: "snake-reference.png",
     mimeType: "image/png"
+  },
+  banner: {
+    fileId: "1SQoPg-PZNwRAAXaoi83PATvT2lKbuj4-",
+    fallbackPath: join(publicDir, "assets", "orochi-fan-site-banner.png"),
+    filename: "orochi-fan-site-banner.png",
+    mimeType: "image/png"
   }
 };
 
