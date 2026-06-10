@@ -60,7 +60,7 @@ function loadImage(dataUrl) {
 async function normalizeImageFile(file) {
   const sourceDataUrl = await fileToDataUrl(file);
   const image = await loadImage(sourceDataUrl);
-  const maxEdge = 1600;
+  const maxEdge = 1280;
   const scale = Math.min(1, maxEdge / Math.max(image.naturalWidth, image.naturalHeight));
   const width = Math.max(1, Math.round(image.naturalWidth * scale));
   const height = Math.max(1, Math.round(image.naturalHeight * scale));
@@ -73,7 +73,7 @@ async function normalizeImageFile(file) {
   context.fillRect(0, 0, width, height);
   context.drawImage(image, 0, 0, width, height);
 
-  return canvas.toDataURL("image/jpeg", 0.9);
+  return canvas.toDataURL("image/jpeg", 0.86);
 }
 
 function dataUrlToFile(dataUrl, filename) {
@@ -193,7 +193,10 @@ async function generate(event) {
     showOnly("result");
   } catch (error) {
     showOnly("empty");
-    showError(error.message || "生成に失敗しました。");
+    const message = error.message === "Load failed" || error.message === "Failed to fetch"
+      ? "通信が途中で切れてしまいました。時間をおいてもう一度試すか、少し小さめの写真で試してください。"
+      : error.message || "生成に失敗しました。";
+    showError(message);
   } finally {
     generateButton.disabled = false;
     generateButton.querySelector("span").textContent = "画像を生成する";
