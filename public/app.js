@@ -6,6 +6,7 @@ const resultState = document.querySelector("#resultState");
 const resultImage = document.querySelector("#resultImage");
 const saveToPhotos = document.querySelector("#saveToPhotos");
 const postToX = document.querySelector("#postToX");
+const fanSiteBanner = document.querySelector(".fan-site-banner");
 const errorBox = document.querySelector("#errorBox");
 
 const inputs = {
@@ -135,6 +136,15 @@ async function saveGeneratedImageToPhotos() {
   link.click();
 }
 
+function openFanSiteInNewWindow(event) {
+  event.preventDefault();
+  const url = fanSiteBanner.href;
+  const opened = window.open(url, "_blank", "noopener,noreferrer");
+  if (!opened) {
+    window.location.href = url;
+  }
+}
+
 async function handleFile(name, file) {
   if (!file) return;
   if (!file.type.startsWith("image/")) {
@@ -201,3 +211,4 @@ form.addEventListener("submit", generate);
 
 saveToPhotos.addEventListener("click", saveGeneratedImageToPhotos);
 postToX.addEventListener("click", postGeneratedImageToX);
+fanSiteBanner.addEventListener("click", openFanSiteInNewWindow);
