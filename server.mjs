@@ -143,23 +143,10 @@ async function referenceAssetToBlob(name) {
 }
 
 function buildPrompt({ maskFaces, note }) {
-  const maskInstruction = maskFaces
-    ? "Mask option is ON. Apply Orochi masks only as accessories directly on top of the faces of humans who already exist in the original base photo. Do not create any new human bodies, heads, silhouettes, faces, masked figures, crowds, or background people. Keep every original human's body, pose, clothing, location, size, and visibility unchanged; only cover their existing face area with an Orochi mask. The masks must be based on the Orochi reference: soft plush-like white material, red eyes, red forehead mark, small black nostrils, gentle smiling mouth, and subtle scale patches. If the base photo has no people, create no masked people. Do not mask the inserted boy."
-    : "Do not hide, mask, remove, replace, alter, or reduce the visibility of people who already exist in the original photo.";
-
   return [
-    "Edit the first uploaded image as the base photo.",
-    "This is a strict photo edit, not a new scene generation. Preserve the base photo's original people count and positions exactly.",
-    "Every original person, including main subjects, background people, bystanders, partial bodies, faces, and small distant people already present in the base photo, must remain visible and in the same place. Never remove, erase, hide, crop out, replace, merge, blur away, simplify, or reduce the visibility of any original person.",
-    "Add exactly one new human: Takeru. Add exactly one non-human companion character: Orochi. Do not add any other people, human bodies, faces, heads, silhouettes, crowds, bystanders, animals, mascots, or extra subjects.",
-    "The final image must contain all original people already present in the base photo, plus only Takeru as the added human and Orochi as the added companion. If the base photo has no people, the only human in the result must be Takeru.",
-    "The second uploaded image is the fixed boy reference. Naturally add this same Japanese boy, Takeru age 7, into the base photo. Preserve his identity, hairstyle, face, proportions, cream short-sleeve shirt, sage green shorts, and beige sandals unless the scene requires minor natural adaptation.",
-    "The third uploaded image is the fixed companion character reference named Orochi. Add this same Orochi character near him in a believable, safe-looking way. Preserve its plush-like body, red eyes, red forehead mark, soft smile, black nostrils, and subtle scale patches.",
-    "Keep the original location, composition, clothing, bodies, people, background, and scene details intact. Change only what is needed to naturally blend Takeru and Orochi into the existing photo, and optionally add masks to original people's faces when requested.",
-    maskInstruction,
-    "Final hard rule: do not add any humans besides Takeru, and do not remove or obscure any humans from the original base photo.",
-    "The result should look like a real smartphone photo, not a collage or illustration.",
-    note ? `Extra user direction: ${note}` : ""
+    "1枚目の写真に、2枚目の男の子を違和感なく馴染ませて入れて。男の子の相棒として、3枚目の蛇も入れて。",
+    maskFaces ? "追加する男の子以外の人間全員蛇デザインのお面をつけて顔を隠して。" : "",
+    note ? `追加指示: ${note}` : ""
   ].filter(Boolean).join("\n");
 }
 
