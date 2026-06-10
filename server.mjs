@@ -37,7 +37,7 @@ const referenceAssets = {
     mimeType: "image/png"
   },
   hero: {
-    fileId: "1LATjXC_ASeuJLPBx-smCNJoNSn8HO8oL",
+    fileId: "19HnSIGWfhjvf5XEol5rzvt73Do98BEmZ",
     fallbackPath: join(publicDir, "assets", "hero-takeru-snake.png"),
     filename: "hero-takeru-snake.png",
     mimeType: "image/png"
