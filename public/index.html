@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>たけるとにんケット</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">AI photo magic</p>
+          <h1>たけるとにんケット</h1>
+          <p class="lead">
+            たけるとにんケットに行った気分になれるAI画像加工アプリだよ。撮った写真をアップロードして生成ボタンをポチッとしてみて。
+          </p>
+        </div>
+        <div class="hero-image-wrap" aria-hidden="true">
+          <img src="/api/reference/hero" alt="" />
+        </div>
+      </header>
+
+      <section class="workspace">
+        <form class="control-panel" id="generateForm">
+          <div class="section-title">
+            <span>1</span>
+            <h2>写真をアップロード</h2>
+          </div>
+
+          <div class="upload-grid">
+            <label class="drop-zone" data-kind="base">
+              <input id="basePhoto" type="file" accept="image/png,image/jpeg,image/webp" />
+              <span class="drop-title">ここをタップして写真を選んでね</span>
+              <img id="basePreview" alt="" />
+            </label>
+          </div>
+
+          <div class="section-title">
+            <span>2</span>
+            <h2>お面で顔を隠す（オプション）</h2>
+          </div>
+
+          <label class="toggle-row">
+            <input id="maskFaces" type="checkbox" checked />
+            <span class="toggle-track"></span>
+            <span>
+              <strong>オロチのお面</strong>
+              <small>写真に写っている人の顔を、相棒のオロチモチーフのお面で隠せます。</small>
+            </span>
+            <span class="mask-state">
+              <span class="state-off">OFF</span>
+              <span class="state-on">ON</span>
+            </span>
+          </label>
+
+          <button class="generate-button" id="generateButton" type="submit">
+            <span>画像を生成する</span>
+          </button>
+        </form>
+
+        <section class="result-panel" aria-live="polite">
+          <div class="result-empty" id="emptyState">
+            <div class="phone-frame">
+              <div class="photo-placeholder"></div>
+            </div>
+            <p>生成結果がここに表示されます。</p>
+          </div>
+
+          <div class="result-ready hidden" id="resultState">
+            <img id="resultImage" alt="生成された写真" />
+            <div class="result-actions">
+              <a id="downloadLink" download="snake-mask-photo.png">まずは画像をダウンロード</a>
+              <button id="postToX" class="x-post-button" type="button">#たけるとにんケット でポスト</button>
+            </div>
+          </div>
+
+          <div class="result-loading hidden" id="loadingState">
+            <div class="spinner"></div>
+            <p>たけるくんが頑張ってにんケットに向かっています。応援しながら、しばらくお待ちください。</p>
+          </div>
+
+          <div class="error-box hidden" id="errorBox"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
