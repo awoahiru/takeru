@@ -56,6 +56,11 @@ const referenceAssets = {
   }
 };
 
+const referenceCache = new Map();
+const referenceFetches = new Map();
+const referenceCacheMaxAgeMs = 1000 * 60 * 60 * 24;
+const referenceBrowserCacheHeader = "public, max-age=604800, stale-while-revalidate=86400";
+
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -126,20 +131,51 @@ async function getReferenceAsset(name) {
     throw error;
   }
 
-  try {
-    return await fetchDriveAsset(asset);
-  } catch (error) {
-    try {
-      const bytes = await readFile(asset.fallbackPath);
-      return {
-        bytes,
-        contentType: asset.mimeType,
-        fallbackReason: error.message
-      };
-    } catch {
-      throw error;
-    }
+  const cached = referenceCache.get(name);
+  if (cached && Date.now() - cached.cachedAt < referenceCacheMaxAgeMs) {
+    return cached;
   }
+
+  const existingFetch = referenceFetches.get(name);
+  if (existingFetch) return existingFetch;
+
+  const fetchTask = (async () => {
+    let result;
+
+    try {
+      result = await fetchDriveAsset(asset);
+    } catch (error) {
+      try {
+        const bytes = await readFile(asset.fallbackPath);
+        result = {
+          bytes,
+          contentType: asset.mimeType,
+          fallbackReason: error.message
+        };
+      } catch {
+        throw error;
+      }
+    }
+
+    const cachedResult = {
+      ...result,
+      cachedAt: Date.now()
+    };
+    referenceCache.set(name, cachedResult);
+    return cachedResult;
+  })();
+
+  referenceFetches.set(name, fetchTask);
+
+  try {
+    return await fetchTask;
+  } finally {
+    referenceFetches.delete(name);
+  }
+}
+
+async function warmReferenceAssets() {
+  await Promise.allSettled(Object.keys(referenceAssets).map((name) => getReferenceAsset(name)));
 }
 
 async function referenceAssetToBlob(name) {
@@ -256,7 +292,7 @@ const server = createServer(async (req, res) => {
       res.writeHead(200, {
         "content-type": contentType || asset.mimeType,
         "content-length": bytes.length,
-        "cache-control": "no-store"
+        "cache-control": referenceBrowserCacheHeader
       });
       res.end(bytes);
       return;
@@ -293,4 +329,7 @@ const server = createServer(async (req, res) => {
 
 server.listen(PORT, HOST, () => {
   console.log(`たけるとにんケット is running at http://${HOST}:${PORT}`);
+  warmReferenceAssets().catch((error) => {
+    console.warn(`Reference image preload failed: ${error.message}`);
+  });
 });
