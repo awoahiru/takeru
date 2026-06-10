@@ -286,7 +286,8 @@ const server = createServer(async (req, res) => {
     }
 
     if (req.method === "GET" && req.url?.startsWith("/api/reference/")) {
-      const name = decodeURIComponent(req.url.split("/").pop() || "");
+      const referenceUrl = new URL(req.url, `http://${req.headers.host}`);
+      const name = decodeURIComponent(referenceUrl.pathname.split("/").pop() || "");
       const asset = referenceAssets[name];
       const { bytes, contentType } = await getReferenceAsset(name);
       res.writeHead(200, {
