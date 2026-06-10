@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "functions": {
+    "api/generate.js": {
+      "maxDuration": 60
+    },
+    "api/reference/[name].js": {
+      "maxDuration": 30
+    }
+  }
+}
