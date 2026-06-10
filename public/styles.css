@@ -420,6 +420,7 @@ textarea {
   border-color: var(--ink);
 }
 
+.result-actions .save-photo-button,
 .result-actions .x-post-button {
   background: #111111;
   color: white;
