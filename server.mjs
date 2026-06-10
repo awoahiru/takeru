@@ -145,7 +145,7 @@ async function referenceAssetToBlob(name) {
 function buildPrompt({ maskFaces, note }) {
   return [
     "1枚目の写真に、2枚目の男の子を違和感なく馴染ませて入れて。男の子の相棒として、3枚目の蛇も入れて。",
-    maskFaces ? "1枚目の写真に人間がいる場合に限り、追加する男の子以外の人間全員蛇デザインのお面をつけて顔を隠して。新たに人間を追加するのはNGです。" : "",
+    maskFaces ? "1枚目の写真に人間がいる場合のみ、全員蛇デザインのお面をつけて顔を隠して。それ以外は変更不可です。" : "",
     note ? `追加指示: ${note}` : ""
   ].filter(Boolean).join("\n");
 }
