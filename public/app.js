@@ -171,6 +171,9 @@ async function generate(event) {
   showOnly("loading");
 
   try {
+    const imageAspect = previews.basePhoto.naturalWidth / previews.basePhoto.naturalHeight;
+    const outputSize = imageAspect > 1.15 ? "1536x1024" : imageAspect < 0.87 ? "1024x1536" : "1024x1024";
+
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -178,7 +181,7 @@ async function generate(event) {
         basePhoto: imageState.basePhoto,
         maskFaces: document.querySelector("#maskFaces").checked,
         quality: "medium",
-        size: "auto",
+        size: outputSize,
         note: ""
       })
     });
@@ -194,7 +197,7 @@ async function generate(event) {
   } catch (error) {
     showOnly("empty");
     const message = error.message === "Load failed" || error.message === "Failed to fetch"
-      ? "通信が途中で切れてしまいました。時間をおいてもう一度試すか、少し小さめの写真で試してください。"
+      ? "画像生成サーバーとの通信が途中で切れてしまいました。少し時間をおいて、もう一度試してください。"
       : error.message || "生成に失敗しました。";
     showError(message);
   } finally {
