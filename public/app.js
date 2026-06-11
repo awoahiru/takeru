@@ -171,9 +171,6 @@ async function generate(event) {
   showOnly("loading");
 
   try {
-    const imageAspect = previews.basePhoto.naturalWidth / previews.basePhoto.naturalHeight;
-    const outputSize = imageAspect > 1.15 ? "1536x1024" : imageAspect < 0.87 ? "1024x1536" : "1024x1024";
-
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -181,7 +178,7 @@ async function generate(event) {
         basePhoto: imageState.basePhoto,
         maskFaces: document.querySelector("#maskFaces").checked,
         quality: "medium",
-        size: outputSize,
+        size: "auto",
         note: ""
       })
     });
