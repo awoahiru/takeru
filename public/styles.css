@@ -365,6 +365,13 @@ textarea {
   text-align: center;
 }
 
+.loading-important {
+  display: block;
+  margin-top: 10px;
+  color: #d83b2d;
+  font-weight: 800;
+}
+
 .phone-frame {
   width: min(310px, 70vw);
   aspect-ratio: 9 / 16;
