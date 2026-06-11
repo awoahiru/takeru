@@ -113,7 +113,7 @@ async function saveGeneratedImageToPhotos() {
     return;
   }
 
-  const file = dataUrlToFile(generatedImageDataUrl, "takeru-ninket.png");
+  const file = dataUrlToFile(generatedImageDataUrl, "takeru-ninket.jpg");
 
   if (navigator.canShare?.({ files: [file] }) && navigator.share) {
     try {
@@ -132,7 +132,7 @@ async function saveGeneratedImageToPhotos() {
 
   const link = document.createElement("a");
   link.href = generatedImageDataUrl;
-  link.download = "takeru-ninket.png";
+  link.download = "takeru-ninket.jpg";
   link.click();
 }
 
