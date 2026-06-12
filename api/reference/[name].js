@@ -11,7 +11,7 @@ export const config = {
 
 export default async function handler(req, res) {
   try {
-    if (req.method !== "GET") {
+    if (req.method !== "GET" && req.method !== "HEAD") {
       sendJson(res, 405, { error: "Method not allowed" });
       return;
     }
@@ -25,6 +25,11 @@ export default async function handler(req, res) {
     res.setHeader("content-type", contentType || asset.mimeType);
     res.setHeader("content-length", bytes.length);
     res.setHeader("cache-control", referenceBrowserCacheHeader);
+    if (req.method === "HEAD") {
+      res.end();
+      return;
+    }
+
     res.end(bytes);
   } catch (error) {
     sendJson(res, error.status || 500, {
