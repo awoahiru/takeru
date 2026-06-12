@@ -4,6 +4,9 @@
     "api/generate.js": {
       "maxDuration": 60
     },
+    "api/ogp.js": {
+      "maxDuration": 30
+    },
     "api/reference/[name].js": {
       "maxDuration": 30
     }
