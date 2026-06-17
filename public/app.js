@@ -101,7 +101,7 @@ async function postGeneratedImageToX() {
     return;
   }
 
-  const text = encodeURIComponent("#たけるとにんケット #にんケット2026");
+  const text = encodeURIComponent("#たけるとにんケット #にんケット2026 #CNPオロチ");
   window.open(`https://x.com/intent/tweet?text=${text}`, "_blank", "noopener,noreferrer");
 }
 
