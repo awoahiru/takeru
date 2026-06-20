@@ -45,7 +45,7 @@ textarea {
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
+  grid-template-columns: 1fr;
   align-items: center;
   gap: 22px;
   margin-bottom: 20px;
